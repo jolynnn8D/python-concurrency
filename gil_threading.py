@@ -1,15 +1,7 @@
 import threading
-import time
 
+from util import measure_time
 
-def measure_time(func):
-    def wrapper(*args, **kwargs):
-        start = time.perf_counter()
-        func(*args, **kwargs)
-        end = time.perf_counter()
-        print("Elapsed time during the whole program in ms:",
-                                                (end-start)*100)
-    return wrapper
 
 class MyClass:
     def __init__(self):
@@ -70,7 +62,7 @@ my_object = MyClass()
 
 def add_values_with_print(thread, add_func, start, end):
     for i in range(start, end):
-        print(f"Thread #{thread} adding {i}")
+        print(f"#{thread} adding {i}", end=', ')
         add_func(i)
 
 @measure_time
@@ -87,4 +79,24 @@ def thread_add_and_print():
 # Obersvation: Some interleaving can be observed now, I/O operations will release the GIL
 thread_add_and_print()
 print(len(my_object.my_list))
-print(my_object.my_list)
+# print(my_object.my_list)
+
+# A simple CPU intensive task without any shared resources
+def cpu_bound_task():
+    count = 0
+    for _ in range(10**7):
+        count += 1
+
+@measure_time
+def thread_run():
+    thread_1 = threading.Thread(target=cpu_bound_task)
+    thread_2 = threading.Thread(target=cpu_bound_task)
+
+    thread_1.start()
+    thread_2.start()
+
+    thread_1.join()
+    thread_2.join()
+
+
+thread_run()
