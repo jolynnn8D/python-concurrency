@@ -6,6 +6,6 @@ def measure_time(func):
         start = time.perf_counter()
         func(*args, **kwargs)
         end = time.perf_counter()
-        print("Elapsed time during the whole program in ms:",
+        print(f"{func.__name__} elapsed time during the whole program in ms:",
                                                 (end-start)*100)
     return wrapper

@@ -62,7 +62,7 @@ my_object = MyClass()
 
 def add_values_with_print(thread, add_func, start, end):
     for i in range(start, end):
-        print(f"#{thread} adding {i}", end=', ')
+        print(f"#{thread} adding {i}")
         add_func(i)
 
 @measure_time
@@ -82,21 +82,23 @@ print(len(my_object.my_list))
 # print(my_object.my_list)
 
 # A simple CPU intensive task without any shared resources
+
 def cpu_bound_task():
     count = 0
     for _ in range(10**7):
         count += 1
 
 @measure_time
-def thread_run():
-    thread_1 = threading.Thread(target=cpu_bound_task)
-    thread_2 = threading.Thread(target=cpu_bound_task)
+def thread_count(num_threads):
+    threads = []
+    for _ in range(num_threads):
+        t = threading.Thread(target=cpu_bound_task)
+        threads.append(t)
+        t.start()
 
-    thread_1.start()
-    thread_2.start()
-
-    thread_1.join()
-    thread_2.join()
+    for t in threads:
+        t.join()
 
 
-thread_run()
+thread_count(1)
+thread_count(5)

@@ -3,6 +3,26 @@ import multiprocessing as mp
 from util import measure_time
 
 
+def cpu_bound_task():
+    count = 0
+    for _ in range(10**7):
+        count += 1
+
+@measure_time
+def process_count(num_process):
+    processes = []
+    for i in range(num_process):
+        p = mp.Process(target=cpu_bound_task)
+        processes.append(p)
+        p.start()
+
+    for p in processes:
+        p.join()       
+
+# Time taken for process_count(1) and process_count(5) is similar
+process_count(1)
+process_count(5)
+
 class MyClass:
     def __init__(self):
         self.manager = mp.Manager()
@@ -29,5 +49,5 @@ def process_add():
     for p in processes:
         p.join()    
 
-process_add()
-print(len(my_object.my_list))
+# process_add()
+# print(len(my_object.my_list))
