@@ -2,6 +2,7 @@ import multiprocessing as mp
 
 from util import measure_time
 
+# A simple multiprocessing test for CPU intensive task
 
 def cpu_bound_task():
     count = 0
@@ -49,5 +50,6 @@ def process_add():
     for p in processes:
         p.join()    
 
-# process_add()
-# print(len(my_object.my_list))
+# With shared resource, multiprocessing becomes extremely slow -- mutex on shared resource + overhead for context switch
+process_add()
+print(len(my_object.my_list))
