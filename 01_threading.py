@@ -11,11 +11,12 @@ class MyClass:
     def add_value(self, value):
         self.my_list.append(value)
 
-my_object = MyClass()
 
 def add_values(add_func, start, end):
     for i in range(start, end):
         add_func(i)
+
+my_object = MyClass()
 
 @measure_time
 def thread_add():
@@ -28,14 +29,16 @@ def thread_add():
     thread_1.join()
     thread_2.join()
 
-thread_add()
-# It can be seen here that thread 1 runs entirely before thread 2
-# This is because of GIL locking my_list
-# print(my_object.my_list)
-print(len(my_object.my_list))
+def ex1():
+    thread_add()
+    # It can be seen here that thread 1 runs entirely before thread 2
+    # This is because of GIL locking my_list
+    # print(my_object.my_list)
+    print(len(my_object.my_list))
 
 
 # Thought: What if there's another object?
+
 my_object = MyClass()
 second_object = MyClass()
 
@@ -52,13 +55,12 @@ def thread_add_different_object():
 
 # Observation: Runtime is similar -- GIL blocks execution of Python bytecode
 
-thread_add_different_object()
-print(len(my_object.my_list))
-print(len(second_object.my_list))
+def ex2():
+    thread_add_different_object()
+    print(len(my_object.my_list))
+    print(len(second_object.my_list))
 
 # Thought: Adding IO operation to the function should change the execution order
- 
-my_object = MyClass()
 
 def add_values_with_print(thread, add_func, start, end):
     for i in range(start, end):
@@ -76,10 +78,12 @@ def thread_add_and_print():
     thread_1.join()
     thread_2.join()
 
-# Obersvation: Some interleaving can be observed now, I/O operations will release the GIL
-thread_add_and_print()
-print(len(my_object.my_list))
-# print(my_object.my_list)
+def ex3():
+    my_object = MyClass()
+    # Obersvation: Some interleaving can be observed now, I/O operations will release the GIL
+    thread_add_and_print()
+    print(len(my_object.my_list))
+    # print(my_object.my_list)
 
 # A simple CPU intensive task without any shared resources
 
@@ -99,6 +103,12 @@ def thread_count(num_threads):
     for t in threads:
         t.join()
 
+def ex4():
+    thread_count(1)
+    thread_count(5)
 
-thread_count(1)
-thread_count(5)
+if __name__ == "__main__":
+    ex1()
+    ex2()
+    ex3()
+    ex4()

@@ -10,4 +10,4 @@ By using `threading` to run CPU and I/O operations, we can observe how CPU opera
 An extension of `01. Threading` to see how multiprocesses differ from multithreaded programmes in Python. Some key points to observe are the overhead involved in context switching and the manipulation of shared resources.
 
 ## 03. Generators
-A simple exercise on how generators can be used for data processing pipelines and a leadup into understanding coroutines.
+A simple exercise on how generators can be used for data processing pipelines and a leadup into understanding coroutines. This loosely follows the PyCon presentation: [Generator Tricks For Systems Programmers](https://www.dabeaz.com/generators/Generators.pdf).
