@@ -1,4 +1,6 @@
 import re
+import time
+import os
 from pathlib import Path
 
 # Basic generator functions
@@ -62,6 +64,24 @@ def ex2():
     for f in functions:
         print(f)
 
+# Dealing with infinite streams
+
+def follow(f):
+    f.seek(0, os.SEEK_END)
+    while True:
+        line = f.readline()
+        if not line:
+            time.sleep(0.1)
+            continue
+        yield line
+
+def ex3():
+    file = open("./files/log.txt", "r")
+    lines = follow(file)
+    for line in lines:
+        print(line, end='')
+
 if __name__ == "__main__":
     ex1()
     ex2()
+    ex3()
